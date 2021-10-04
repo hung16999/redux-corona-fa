@@ -1,25 +1,33 @@
-import axios from 'axios'
+import { AxiosResponse } from 'axios'
 import { Dispatch } from 'redux'
+import { requestLogIn, requestLogOut } from '../api/http'
 import { Account } from '../types/account.type'
-import { SET_USER } from './actionType'
+import { User } from '../types/user.type'
+import { REJECT_LOG_IN, SET_USER } from './actionType'
 
-export const baseURL = 'http://localhost:3000'
-
-export function getUser(payload: Account) {
-  return function (dispatch: Dispatch) {
-    axios
-      .post(`${baseURL}/api/login`, payload, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => dispatch(setUser(res.data)))
-  }
-}
-
-export const setUser = (payload: any) => {
+export const setUser = (payload: null | User) => {
   return {
     type: SET_USER,
     payload
   }
+}
+
+export const logIn = (payload: Account) => (dispatch: Dispatch) => {
+  requestLogIn(payload)
+    .then((res: AxiosResponse<any>) => dispatch(setUser(res.data.user)))
+    .catch(_ => {
+      dispatch(rejectLogin())
+    })
+}
+
+export function rejectLogin() {
+  return {
+    type: REJECT_LOG_IN
+  }
+}
+
+export const logOut = () => (dispatch: Dispatch) => {
+  requestLogOut()?.then(_ => {
+    dispatch(setUser(null))
+  })
 }

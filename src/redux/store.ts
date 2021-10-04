@@ -5,6 +5,7 @@ import { userReducer } from './userReducer'
 
 const store = createStore(
   userReducer,
+  undefined,
   composeWithDevTools(applyMiddleware(reduxThunk))
 )
 

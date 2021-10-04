@@ -1,33 +1,29 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import { Dispatch } from 'redux'
 
-import { getUser } from '../redux/userAction'
+import { logIn } from '../redux/userAction'
 
 import { Account } from '../types/account.type'
 import { RootState } from '../types/rootState.type'
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const dispatch = useDispatch()
-  const user = useSelector((store: RootState) => store)
+  const dispatch = useDispatch<Dispatch<any>>()
+  const { user, errorLogin } = useSelector((store: RootState) => store)
   const history = useHistory()
 
-  console.log(user)
+  useEffect(() => {
+    if (user) {
+      history.push('/admin')
+    } else {
+      history.push('/login')
+    }
+  }, [user, history])
 
-  useEffect(
-    function () {
-      if (user.user) {
-        history.push('/admin')
-      } else {
-        history.push('/login')
-      }
-    },
-    [user, history]
-  )
-
-  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
+  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target
 
     switch (name) {
@@ -42,10 +38,10 @@ function Login() {
     }
   }
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const account: Account = { email: email, password: password }
-    dispatch(getUser(account))
+    dispatch(logIn(account))
   }
 
   return (
@@ -68,6 +64,7 @@ function Login() {
         />
         <button>login</button>
       </form>
+      {errorLogin && <div>username or password is incorrect</div>}
     </>
   )
 }
