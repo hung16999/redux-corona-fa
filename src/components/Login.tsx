@@ -45,7 +45,7 @@ const Login = () => {
   }
 
   return (
-    <>
+    <div className="text-center mt-5">
       <form onSubmit={handleLogin}>
         <input
           type="text"
@@ -62,10 +62,13 @@ const Login = () => {
           onChange={handleOnChange}
           placeholder="password"
         />
+
         <button>login</button>
       </form>
-      {errorLogin && <div>username or password is incorrect</div>}
-    </>
+      {errorLogin && (
+        <div className="text-danger">username or password is incorrect</div>
+      )}
+    </div>
   )
 }
 

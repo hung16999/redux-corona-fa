@@ -1,4 +1,3 @@
-import React from 'react'
 import { Table } from 'react-bootstrap'
 import { Brief } from '../types/brief.type'
 interface Props {
@@ -18,9 +17,9 @@ const TableData = ({ data }: Props) => {
       </thead>
       <tbody>
         <tr>
-          <td>{data.confirmed}</td>
-          <td>{data.recovered}</td>
-          <td>{data.deaths}</td>
+          <td>{new Intl.NumberFormat('de-DE').format(data.confirmed)}</td>
+          <td>{new Intl.NumberFormat('de-DE').format(data.recovered)}</td>
+          <td>{new Intl.NumberFormat('de-DE').format(data.deaths)}</td>
           <td>{((data.deaths / data.confirmed) * 100).toFixed(2)} %</td>
         </tr>
       </tbody>
